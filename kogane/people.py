@@ -18,13 +18,11 @@ A liaison between players and You! XD
 print(banner)
 
 
-DATA_DIR = "data"
-DATA_FILE = os.path.join(DATA_DIR, "people.json")
-
+DATA_FILE = os.path.join("data", "people.json")
 
 def load_people():
-    if not os.path.exists(DATA_DIR):
-        os.makedirs(DATA_DIR)
+    if not os.path.exists("data"):
+        os.makedirs("data")
 
     if not os.path.exists(DATA_FILE):
         with open(DATA_FILE, "w") as f:
@@ -33,19 +31,16 @@ def load_people():
     with open(DATA_FILE, "r") as f:
         return json.load(f)
 
-
 def save_people(people):
     with open(DATA_FILE, "w") as f:
         json.dump(people, f, indent=4)
 
-
 def add_person():
-    print("\n=== Add Person ===")
+    print("\nADD PERSON")
 
     name = input("Name: ")
     age = input("Age: ")
     phone = input("Phone: ")
-    address = input("Address: ")
     notes = input("Notes: ")
 
     people = load_people()
@@ -54,83 +49,67 @@ def add_person():
         "name": name,
         "age": age,
         "phone": phone,
-        "address": address,
         "notes": notes
     })
 
     save_people(people)
-
-    print("\nPerson added successfully!")
-
+    print("Saved!")
 
 def list_people():
     people = load_people()
 
-    if len(people) == 0:
-        print("\nNo people stored.")
+    print("\nALL PEOPLE")
+
+    if not people:
+        print("No people found.")
         return
 
-    print("\n=== People ===")
-
-    for i, person in enumerate(people, start=1):
-        print("-" * 30)
-        print(f"#{i}")
-        print(f"Name    : {person['name']}")
-        print(f"Age     : {person['age']}")
-        print(f"Phone   : {person['phone']}")
-        print(f"Address : {person['address']}")
-        print(f"Notes   : {person['notes']}")
-
+    for p in people:
+        print("-----------------")
+        print("Name:", p["name"])
+        print("Age:", p["age"])
+        print("Phone:", p["phone"])
+        print("Notes:", p["notes"])
 
 def search_people():
     people = load_people()
 
-    search = input("\nSearch name: ").lower()
+    query = input("Search name: ").lower()
 
     found = False
 
-    for person in people:
-        if search in person["name"].lower():
+    for p in people:
+        if query in p["name"].lower():
+            print("\nMATCH FOUND")
+            print("Name:", p["name"])
+            print("Age:", p["age"])
+            print("Phone:", p["phone"])
+            print("Notes:", p["notes"])
             found = True
-            print("-" * 30)
-            print(f"Name    : {person['name']}")
-            print(f"Age     : {person['age']}")
-            print(f"Phone   : {person['phone']}")
-            print(f"Address : {person['address']}")
-            print(f"Notes   : {person['notes']}")
 
     if not found:
-        print("No matches found.")
-
+        print("No results found.")
 
 def main():
     while True:
-        print("\n====================")
-        print("      KOGANE")
-        print("====================")
+        print("\n==== KOGANE ====")
         print("1. Add person")
         print("2. List people")
         print("3. Search")
         print("4. Exit")
 
-        choice = input("\nChoose an option: ")
+        choice = input("> ")
 
         if choice == "1":
             add_person()
-
         elif choice == "2":
             list_people()
-
         elif choice == "3":
             search_people()
-
         elif choice == "4":
-            print("Goodbye!")
             break
-
         else:
-            print("Invalid option.")
-
+            print("Invalid option")
 
 if __name__ == "__main__":
     main()
